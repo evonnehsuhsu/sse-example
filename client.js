@@ -14,19 +14,17 @@ const closeStream = () => {
 
 const submitForm = async () => {
   console.log("submit");
-  // try {
-  //   const targetEle = document.getElementById("name");
-  //   const text = targetEle.value;
-  //   const url = `${host}/save?t=` + new Date().getTime().toString();
-  //   const res = await fetch(url, {
-  //     method: "POST",
-  //     body: JSON.stringify(text),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-  //   console.log(res);
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    const targetEle = document.getElementById("name");
+    const text = targetEle.value;
+    const url = `${host}/save?data=${text}`;
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -5,14 +5,9 @@ const host = "127.0.0.1";
 const port = 8080;
 
 // inmitate a data source that changes over time
-let dataSource = 0;
-const updateDataSource = () => {
-  const delta = Math.random();
-  dataSource += delta;
-};
+let dataSource = "";
 
 const requestListener = (req, res) => {
-  console.log(req.url);
   if (req.url === "/") {
     res.statusCode = 200;
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -28,11 +23,21 @@ const requestListener = (req, res) => {
       const data = JSON.stringify({ ticker: dataSource });
       res.write(`id: ${new Date().toLocaleTimeString()}\ndata: ${data}\n\n`);
     }, 1000);
-  } else if (req.url === "/save" && req.method === "POST") {
-    res.statusCode = 200;
+  } else if (req.url.includes("/save")) {
+    const params = req.url.replace("/save?data=", "");
+    dataSource = params;
     res.setHeader("Access-Control-Allow-Origin", "*");
-
-    res.write("success");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH"
+    );
+    res.setHeader("content-type", "application/json");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    res.statusCode = 200;
+    res.end("success");
   } else {
     res.statusCode = 404;
     res.end("resource does not exist");
@@ -41,7 +46,5 @@ const requestListener = (req, res) => {
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
-  setInterval(() => updateDataSource(), 500);
-
   console.log(`server running at http://${host}:${port}`);
 });
