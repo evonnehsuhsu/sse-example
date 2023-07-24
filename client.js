@@ -1,4 +1,4 @@
-const host = "http://127.0.0.1:8080";
+const host = "http://127.0.0.1:3000";
 
 const sseSource = new EventSource(`${host}/ticker`);
 
@@ -13,7 +13,6 @@ const closeStream = () => {
 };
 
 const submitForm = async () => {
-  console.log("submit");
   try {
     const targetEle = document.getElementById("name");
     const text = targetEle.value;
